@@ -6,9 +6,16 @@ const logValue = (v) => logScale(v, 10000, 100);
 //     type: 'scatter'
 // };
 
+xs = [0];
+ys = [logValue(0)];
+for (let i = 1; i < 100; i++) {
+    xs.push(i);
+    ys.push(logValue(i / 100));
+}
+
 var trace2 = {
-    x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    y: [logValue(0.0), logValue(0.1), logValue(0.2), logValue(0.3), logValue(0.4), logValue(0.5), logValue(0.6), logValue(0.7), logValue(0.8), logValue(0.9), logValue(1)],
+    x: xs,
+    y: ys,
     type: 'scatter',
     mode: 'lines+markers',
     line: {
@@ -22,6 +29,17 @@ var data = [trace2];
 var layout = {
     title: 'Log Calc Plot',
     xaxis: {
+        autorange: true
+    },
+    yaxis: {
+        type: 'log',
+        autorange: true
+    }
+};
+
+var layoutTwo = {
+    title: 'Log Calc Plot Two',
+    xaxis: {
         type: 'log',
         autorange: true
     },
@@ -32,3 +50,4 @@ var layout = {
 };
 
 Plotly.newPlot('plot', data, layout, {displayModeBar: false});
+Plotly.newPlot('plotTwo', data, layoutTwo, {displayModeBar: false});
