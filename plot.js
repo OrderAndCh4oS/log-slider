@@ -6,10 +6,10 @@ const logValue = (v) => logScale(v, 10000, 100);
 //     type: 'scatter'
 // };
 
-xs = [0];
+xs = [1];
 ys = [logValue(0)];
 for (let i = 1; i < 100; i++) {
-    xs.push(i);
+    xs.push(i+1);
     ys.push(logValue(i / 100));
 }
 
@@ -32,7 +32,6 @@ var layout = {
         autorange: true
     },
     yaxis: {
-        type: 'log',
         autorange: true
     }
 };
