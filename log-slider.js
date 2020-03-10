@@ -1,11 +1,15 @@
 // const logScale = (value, max, min = 0) => {
-//     const log = min + (-Math.log(1 - value) / Math.log(100)) * (max - min);
+//     const log = (-Math.log(1 - value) / Math.log(100)) * (max);
 //     return log === Infinity ? max : log;
 // };
 //
 // const inverseLogScale = (lg, max, min = 0) => 1 -
-//     Math.pow(100, -lg / (max - min));
+//     Math.pow(100, -lg / (max));
 
+/**
+ * https://www.stevenabbott.co.uk/practical-solubility/polymer-viscosity.php
+ * Log Scale example
+ */
 
 const logScale = (value, max, min = 0) => {
     const x1 = 1 - value;
@@ -32,9 +36,10 @@ class LogSlider {
     _changeHandler;
     _input;
 
-    constructor({id, max, step = 0.01, min = 0, start = 0.5, changeHandler = () => {}}) {
+    constructor({id, max, intervals = null, step = 0.01, min = 0, start = 0.5, changeHandler = () => {}}) {
         this._input = document.getElementById(id);
         this._input.addEventListener('change', this.handleChange);
+        this._intervals = intervals || [min, max];
         this._input.min = 0;
         this._input.max = 1;
         this._input.step = step;
@@ -81,7 +86,7 @@ const logScaleInput = document.getElementById('log-scale-input');
 const demo = new LogSlider({
     id: 'log-scale',
     min: 100,
-    max: 1000,
+    max: 10000,
     changeHandler: (log, value) => {
         logValueInput.value = log.toFixed(3);
         logScaleInput.value = value;
