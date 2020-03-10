@@ -1,4 +1,4 @@
-const logValue = (v) => logScale(v, 10000, 100);
+const logValue = (v) => logScale(v, 10000, 10);
 
 // var trace1 = {
 //     x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -7,45 +7,45 @@ const logValue = (v) => logScale(v, 10000, 100);
 // };
 
 xs = [1];
-ys = [logValue(0)];
-for (let i = 1; i < 100; i++) {
+ys = [logValue(1)];
+for (let i = 1; i < 1000; i++) {
     xs.push(i+1);
-    ys.push(logValue(i / 100));
+    ys.push(logValue(i));
 }
 
-var trace2 = {
+const trace2 = {
     x: xs,
     y: ys,
     type: 'scatter',
     mode: 'lines+markers',
     line: {
         color: 'rgb(16,16,16)',
-        width: 2
-    }
+        width: 2,
+    },
 };
 
-var data = [trace2];
+const data = [trace2];
 
-var layout = {
+const layout = {
     title: 'Log Calc Plot',
     xaxis: {
-        autorange: true
+        autorange: true,
     },
     yaxis: {
-        autorange: true
-    }
+        autorange: true,
+    },
 };
 
-var layoutTwo = {
+const layoutTwo = {
     title: 'Log Calc Plot Two',
     xaxis: {
         type: 'log',
-        autorange: true
+        autorange: true,
     },
     yaxis: {
         type: 'log',
-        autorange: true
-    }
+        autorange: true,
+    },
 };
 
 Plotly.newPlot('plot', data, layout, {displayModeBar: false});

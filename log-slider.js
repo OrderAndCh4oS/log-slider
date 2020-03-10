@@ -12,21 +12,27 @@
  */
 
 const logScale = (value, max, min = 0) => {
-    const x1 = 1 - value;
-    const x2 = -Math.log(x1);
-    const x3 = x2 / Math.log(100);
-    const x4 = max - min;
-    const x5 = x3 * x4;
-    const x6 = x5 + min;
-    return x6 === Infinity ? max : x6;
+    const minP = 1;
+    const maxP = 1000;
+
+    const minV = Math.log(min);
+    const maxV = Math.log(max);
+
+    const scale = (maxV - minV) / (maxP - minP);
+
+    return Math.exp(minV + scale * (value - minP));
 };
 
 const inverseLogScale = (lg, max, min = 0) => {
-    const x5 = lg - min;
-    const x4 = x5 / (max - min);
-    const x3 = x4 * Math.log(100);
-    const x2 = Math.exp(-x3);
-    return 1 - x2;
+    const minP = 1;
+    const maxP = 1000;
+
+    const minV = Math.log(min);
+    const maxV = Math.log(max);
+
+    const scale = (maxV - minV) / (maxP - minP);
+
+    return (Math.log(lg) - minV) / scale + minP;
 };
 
 class LogSlider {
@@ -36,12 +42,11 @@ class LogSlider {
     _changeHandler;
     _input;
 
-    constructor({id, max, intervals = null, step = 0.01, min = 0, start = 0.5, changeHandler = () => {}}) {
+    constructor({id, max, intervals = null, step = 1, min = 1, start = 500, changeHandler = () => {}}) {
         this._input = document.getElementById(id);
         this._input.addEventListener('change', this.handleChange);
-        this._intervals = intervals || [min, max];
-        this._input.min = 0;
-        this._input.max = 1;
+        this._input.min = 1;
+        this._input.max = 1000;
         this._input.step = step;
         this._max = max;
         this._min = min;
