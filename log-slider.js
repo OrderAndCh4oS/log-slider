@@ -38,13 +38,21 @@ const inverseLogScale = (lg, max, min = 0) => {
 class LogSlider {
     _max = 10000;
     _min = 0;
-    _log = 0;
     _changeHandler;
-    _input;
 
-    constructor({id, max, intervals = null, step = 1, min = 1, start = 500, changeHandler = () => {}}) {
+    constructor(
+        {
+            id,
+            max,
+            step = 1,
+            min = 1,
+            start = 500,
+            changeHandler = () => {},
+            inputHandler = () => {},
+        }) {
         this._input = document.getElementById(id);
         this._input.addEventListener('change', this.handleChange);
+        this._input.addEventListener('input', this.handleInput);
         this._input.min = 1;
         this._input.max = 1000;
         this._input.step = step;
@@ -52,8 +60,11 @@ class LogSlider {
         this._min = min;
         this._input.value = start;
         this._log = logScale(start, max, min);
+        this._inputHandler = changeHandler;
         this._changeHandler = changeHandler;
     }
+
+    _log = 0;
 
     get log() {
         return this._log;
@@ -65,12 +76,14 @@ class LogSlider {
         this._changeHandler(this._log, this.value);
     };
 
+    _input;
+
     get input() {
         return this._input;
     }
 
     get value() {
-        return this._input.value
+        return this._input.value;
     }
 
     set value(value) {
@@ -82,30 +95,15 @@ class LogSlider {
     handleChange = () => {
         this._log = logScale(this._input.value, this._max, this._min);
         this._changeHandler(this._log, this.value);
-    }
+    };
+
+    handleInput = () => {
+        this._log = logScale(this._input.value, this._max, this._min);
+        this._inputHandler(this._log, this.value);
+    };
 }
 
 const logValueInput = document.getElementById('log-value');
 const logScaleInput = document.getElementById('log-scale-input');
 
-const demo = new LogSlider({
-    id: 'log-scale',
-    min: 100,
-    max: 10000,
-    changeHandler: (log, value) => {
-        logValueInput.value = log.toFixed(3);
-        logScaleInput.value = value;
-    }
-});
 
-logScaleInput.value = demo.value;
-
-logScaleInput.addEventListener('change', function() {
-    demo.value = this.value;
-});
-
-logValueInput.value = demo.log.toFixed(3);
-
-logValueInput.addEventListener('change', function() {
-    demo.log = Number(this.value);
-});

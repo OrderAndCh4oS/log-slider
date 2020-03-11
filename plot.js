@@ -1,4 +1,31 @@
-const logValue = (v) => logScale(v, 10000, 10);
+const handleDemoUpdate = (log, value) => {
+    logValueInput.value = log.toFixed(3);
+    logScaleInput.value = value;
+    const data = [getData(10000, 'Fixed', 'rgb(156, 156, 156)'), getData(log, 'Dynamic')];
+    Plotly.react('plot', data);
+    Plotly.react('plotTwo', data);
+};
+
+const demo = new LogSlider({
+    id: 'log-scale',
+    min: 100,
+    max: 10000,
+    inputHandler: handleDemoUpdate,
+    changeHandler: handleDemoUpdate,
+});
+
+logScaleInput.value = demo.value;
+
+logScaleInput.addEventListener('change', function() {
+    demo.value = this.value;
+});
+
+logValueInput.value = demo.log.toFixed(3);
+
+logValueInput.addEventListener('change', function() {
+    demo.log = Number(this.value);
+});
+
 
 // var trace1 = {
 //     x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -6,25 +33,29 @@ const logValue = (v) => logScale(v, 10000, 10);
 //     type: 'scatter'
 // };
 
-xs = [1];
-ys = [logValue(1)];
-for (let i = 1; i < 1000; i++) {
-    xs.push(i+1);
-    ys.push(logValue(i));
+function getData(log, name, colour = 'rgb(16, 16, 16)') {
+    const logValue = (v) => logScale(v, log, 100);
+
+    const xs = [1];
+    const ys = [logValue(1)];
+
+    for(let i = 1; i < 1000; i++) {
+        xs.push(i + 1);
+        ys.push(logValue(i));
+    }
+
+    return {
+        name,
+        x: xs,
+        y: ys,
+        type: 'scatter',
+        mode: 'lines',
+        line: {
+            color: colour,
+            width: 2,
+        },
+    };
 }
-
-const trace2 = {
-    x: xs,
-    y: ys,
-    type: 'scatter',
-    mode: 'lines+markers',
-    line: {
-        color: 'rgb(16,16,16)',
-        width: 2,
-    },
-};
-
-const data = [trace2];
 
 const layout = {
     title: 'Log Calc Plot',
@@ -48,5 +79,7 @@ const layoutTwo = {
     },
 };
 
-Plotly.newPlot('plot', data, layout, {displayModeBar: false});
-Plotly.newPlot('plotTwo', data, layoutTwo, {displayModeBar: false});
+const initialData = [getData(10000, 'Fixed', 'rgb(156, 156, 156)'), getData(demo.log, 'Dynamic')];
+
+Plotly.newPlot('plot', initialData, layout, {displayModeBar: false});
+Plotly.newPlot('plotTwo', initialData, layoutTwo, {displayModeBar: false});
