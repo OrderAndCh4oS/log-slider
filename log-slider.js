@@ -1,16 +1,3 @@
-// const logScale = (value, max, min = 0) => {
-//     const log = (-Math.log(1 - value) / Math.log(100)) * (max);
-//     return log === Infinity ? max : log;
-// };
-//
-// const inverseLogScale = (lg, max, min = 0) => 1 -
-//     Math.pow(100, -lg / (max));
-
-/**
- * https://www.stevenabbott.co.uk/practical-solubility/polymer-viscosity.php
- * Log Scale example
- */
-
 const logScale = (value, max, min = 0) => {
     const minP = 1;
     const maxP = 1000;
