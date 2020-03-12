@@ -87,7 +87,7 @@ class RangeSlider {
             throw new Error(`${id} is not does \`type="range"\` set.`)
         }
         this._input.min = type === sliderTypes.LOG ? 1 : min;
-        this._input.max = type === sliderTypes.LOG ? 1000 : min;
+        this._input.max = type === sliderTypes.LOG ? 1000 : max;
         this._input.step = step;
         this._input.value = start;
         this._input.addEventListener('change', this.handleChange);
@@ -153,8 +153,9 @@ class RangeSlider {
     }
 
     updateTab() {
-        this._tab.innerText = (this.isLogSlider() ? this._log : this._input.value).toFixed(0);
-        this._tab.style.left = ((this._input.value / 1000) * this._wrapper.clientWidth) + 'px';
+        const value = Number(this.isLogSlider() ? this._log : this.value);
+        this._tab.innerText = (value.toFixed(0));
+        this._tab.style.left = ((this.value / 1000) * this._wrapper.clientWidth) + 'px';
     }
 
     handleChange = () => {
@@ -172,7 +173,7 @@ class RangeSlider {
     };
 
     _updateLog(handler) {
-        this._log = logScale(this._input.value, this._logMax, this._logMin);
+        this._log = logScale(this.value, this._logMax, this._logMin);
         handler(this.value, this._log);
     }
 
@@ -180,8 +181,5 @@ class RangeSlider {
         handler(this.value);
     }
 }
-
-const logValueInput = document.getElementById('log-value');
-const logScaleInput = document.getElementById('log-scale-input');
 
 
