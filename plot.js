@@ -1,15 +1,16 @@
-const handleDemoUpdate = (log, value) => {
+const handleDemoUpdate = (value, log) => {
     logValueInput.value = log.toFixed(3);
     logScaleInput.value = value;
-    const data = [getData(10000, 'Fixed', 'rgb(156, 156, 156)'), getData(log, 'Dynamic')];
+    const data = plotData(log);
     Plotly.react('plot', data);
     Plotly.react('plotTwo', data);
 };
 
-const demo = new LogSlider({
+const demo = new RangeSlider({
     id: 'log-scale',
     min: 100,
     max: 10000,
+    type: sliderTypes.LOG,
     inputHandler: handleDemoUpdate,
     changeHandler: handleDemoUpdate,
 });
@@ -26,12 +27,12 @@ logValueInput.addEventListener('change', function() {
     demo.log = Number(this.value);
 });
 
-
-// var trace1 = {
-//     x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-//     y: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-//     type: 'scatter'
-// };
+function plotData(log) {
+    return [
+        getData(10000, 'Fixed', 'rgb(156, 156, 156)'),
+        getData(log, 'Dynamic'),
+    ];
+}
 
 function getData(log, name, colour = 'rgb(16, 16, 16)') {
     const logValue = (v) => logScale(v, log, 100);
@@ -79,7 +80,7 @@ const layoutTwo = {
     },
 };
 
-const initialData = [getData(10000, 'Fixed', 'rgb(156, 156, 156)'), getData(demo.log, 'Dynamic')];
+const initialData = plotData(demo.log);
 
 Plotly.newPlot('plot', initialData, layout, {displayModeBar: false});
 Plotly.newPlot('plotTwo', initialData, layoutTwo, {displayModeBar: false});
