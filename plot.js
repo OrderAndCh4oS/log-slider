@@ -11,6 +11,7 @@ const demo = new RangeSlider({
     min: 100,
     max: 10000,
     type: sliderTypes.LOG,
+    showTab: true,
     inputHandler: handleDemoUpdate,
     changeHandler: handleDemoUpdate,
 });
