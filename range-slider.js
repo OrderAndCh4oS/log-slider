@@ -48,7 +48,7 @@ class RangeSlider {
      * @param {number=1} step Step increment of the range slider.
      * @param {number=1} min Minimum value of the range slider
      * @param {number=1000} max Maximum value of the range slider.
-     * @param {number=500} start Start value of the range slider.
+     * @param {number=500} start The initial value of the range slider.
      * @param {'log'|'linear'} type Must be one of sliderTypes ie sliderTypes.LOG or sliderTypes.LINEAR.
      * @param {boolean=false} showTab
      * @param {callback=} changeHandler An onChange callback matching (value, log) => {}
