@@ -485,10 +485,9 @@ input[type="checkbox"]:disabled, input[type="radio"]:disabled {
 input[type="range"] {
     -webkit-appearance: none;
     background-color: transparent;
-    border: none;
+    border-color: transparent;
     padding-left: 0;
     padding-right: 0;
-    width: 100%;
     margin: 12px 0;
 }
 input[type="range"]:focus {

@@ -1,4 +1,3 @@
-
 const logScale = (value, max, min = 0) => {
     const minP = 1;
     const maxP = 1000;
@@ -71,49 +70,23 @@ class RangeSlider {
         }) {
         this._id = id;
         this._type = type;
-        if (this.isLogSlider()) {
-            this._log = logScale(start, max, min);
-            this._logMax = max;
-            this._logMin = min;
-        }
-        this._input = document.getElementById(id);
-        if (!this._input) {
-            throw new Error(`No element found with id of ${id}`)
-        }
-        if (!this._input instanceof HTMLInputElement) {
-            throw new Error(`${id} is not an \`<input />\` tag`)
-        }
-        if (this._input.type !== 'range') {
-            throw new Error(`${id} is not does \`type="range"\` set.`)
-        }
-        this._input.min = type === sliderTypes.LOG ? 1 : min;
-        this._input.max = type === sliderTypes.LOG ? 1000 : max;
-        this._input.step = step;
-        this._input.value = start;
-        this._input.addEventListener('change', this.handleChange);
-        this._input.addEventListener('input', this.handleInput);
+        this._initialiseLogValue(start, max, min);
+        this._configureRangeInput(id, type, min, max, step, start);
         this._inputHandler = inputHandler;
         this._changeHandler = changeHandler;
         this._showTab = showTab;
-        if (showTab) {
-            this._wrapper = document.createElement('div');
-            this._wrapper.style.position = 'relative';
-            this._wrapper.style.paddingBottom = '8px';
-            this._tab = document.createElement('span');
-            this._tab.style.position = 'absolute';
-            this._tab.style.transform = 'translateX(-50%)';
-            this._tab.style.fontSize = '11px';
-            this._tab.style.display = 'block';
-            this._input.parentNode.insertBefore(this._wrapper, this._input);
-            this.updateTab();
-            this._wrapper.append(this._input);
-            this._wrapper.append(this._tab);
+        if(showTab) {
+            this._wrapper = this._createWrapper();
+            this._tab = this._createTab();
+            this._updateDom();
+            this._updateTab();
         }
     }
 
     get log() {
         if(!this.isLogSlider()) {
-            throw new Error(`${this._id} is not a log slider, you can't get a log value. Change the type to sliderTypes.LOG`);
+            throw new Error(
+                `${this._id} is not a log slider, you can't get a log value. Change the type to sliderTypes.LOG`);
         }
 
         return this._log;
@@ -121,7 +94,8 @@ class RangeSlider {
 
     set log(value) {
         if(!this.isLogSlider()) {
-            throw new Error(`${this._id} is not a log slider, you can't set a log value. Change the type to sliderTypes.LOG`);
+            throw new Error(
+                `${this._id} is not a log slider, you can't set a log value. Change the type to sliderTypes.LOG`);
         }
 
         this._log = value;
@@ -144,33 +118,81 @@ class RangeSlider {
             : this._updateValue(this._changeHandler);
     }
 
-    isLogSlider() {
-        return this._type === sliderTypes.LOG;
-    }
+    isLogSlider = () => this._type === sliderTypes.LOG;
 
-    isLinearSlider() {
-        return this._type === sliderTypes.LINEAR;
-    }
-
-    updateTab() {
-        const value = Number(this.isLogSlider() ? this._log : this.value);
-        this._tab.innerText = (value.toFixed(0));
-        this._tab.style.left = ((this.value / 1000) * this._wrapper.clientWidth) + 'px';
-    }
+    isLinearSlider = () => this._type === sliderTypes.LINEAR;
 
     handleChange = () => {
         this.isLogSlider()
             ? this._updateLog(this._changeHandler)
             : this._updateValue(this._changeHandler);
-        this.updateTab();
+        this._updateTab();
     };
 
     handleInput = () => {
         this.isLogSlider()
             ? this._updateLog(this._inputHandler)
             : this._updateValue(this._inputHandler);
-        this.updateTab();
+        this._updateTab();
     };
+
+    _initialiseLogValue(start, max, min) {
+        if(this.isLogSlider()) {
+            this._log = logScale(start, max, min);
+            this._logMax = max;
+            this._logMin = min;
+        }
+    }
+
+    _configureRangeInput(id, type, min, max, step, start) {
+        this._input = document.getElementById(id);
+        if(!this._input) {
+            throw new Error(`No element found with id of ${id}`);
+        }
+        if(!this._input instanceof HTMLInputElement) {
+            throw new Error(`${id} is not an \`<input />\` tag`);
+        }
+        if(this._input.type !== 'range') {
+            throw new Error(`${id} is not does \`type="range"\` set.`);
+        }
+        this._input.min = type === sliderTypes.LOG ? 1 : min;
+        this._input.max = type === sliderTypes.LOG ? 1000 : max;
+        this._input.step = step;
+        this._input.value = start;
+        this._input.addEventListener('change', this.handleChange);
+        this._input.addEventListener('input', this.handleInput);
+    }
+
+    _updateDom() {
+        this._input.parentNode.insertBefore(this._wrapper, this._input);
+        this._wrapper.append(this._input);
+        this._wrapper.append(this._tab);
+    }
+
+    _createWrapper() {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('range-slider--wrapper');
+        wrapper.style.position = 'relative';
+        wrapper.style.paddingBottom = '8px';
+        return wrapper;
+    }
+
+    _createTab() {
+        const tab = document.createElement('span');
+        tab.classList.add('range-slider--tab');
+        tab.style.position = 'absolute';
+        tab.style.transform = 'translateX(-50%)';
+        tab.style.fontSize = '11px';
+        tab.style.display = 'block';
+        return tab;
+    }
+
+    _updateTab() {
+        const value = Number(this.isLogSlider() ? this._log : this.value);
+        this._tab.innerText = (value.toFixed(0));
+        this._tab.style.left = ((this.value / 1000) *
+            (this._wrapper.clientWidth - 10)) + 5 + 'px';
+    }
 
     _updateLog(handler) {
         this._log = logScale(this.value, this._logMax, this._logMin);
