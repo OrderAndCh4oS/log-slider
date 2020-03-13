@@ -5,9 +5,7 @@ const linearValueInput = document.getElementById('linear-scale-input');
 const handleDemoLogUpdate = (value, log) => {
     logValueInput.value = log.toFixed(3);
     logScaleInput.value = value;
-    const data = plotData();
-    Plotly.react('plot', data);
-    Plotly.react('plotTwo', data);
+    plotData();
 };
 
 const demoLog = new RangeSlider({
@@ -22,9 +20,7 @@ const demoLog = new RangeSlider({
 
 const handleDemoLinearUpdate = (value) => {
     linearValueInput.value = value;
-    const data = plotData();
-    Plotly.react('plot', data);
-    Plotly.react('plotTwo', data);
+    plotData();
 };
 
 const demoLinear = new RangeSlider({
@@ -53,12 +49,15 @@ linearValueInput.addEventListener('change', function() {
 });
 
 function plotData() {
-    return [
+    const data =  [
         plotLogData(10000, 'Fixed Log', 'rgb(255, 156, 156)'),
         plotLogData(demoLog.log, 'Dynamic Log', 'rgb(255, 56, 56)'),
         plotLinearData(1000, 'Fixed Linear', 'rgb(156, 255, 156)'),
         plotLinearData(demoLinear.value, 'Dynamic Linear', 'rgb(56, 155, 56)'),
     ];
+
+    Plotly.react('plot', data);
+    Plotly.react('plotTwo', data);
 }
 
 function plotLogData(log, name, colour = 'rgb(16, 16, 16)') {
@@ -137,3 +136,5 @@ const layoutTwo = {
 };
 
 Plotly.newPlot('plotTwo', initialData, layoutTwo, {displayModeBar: false});
+
+plotData();
