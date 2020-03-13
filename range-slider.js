@@ -126,14 +126,12 @@ class RangeSlider {
         this.isLogSlider()
             ? this._updateLog(this._changeHandler)
             : this._updateValue(this._changeHandler);
-        this._updateTab();
     };
 
     handleInput = () => {
         this.isLogSlider()
             ? this._updateLog(this._inputHandler)
             : this._updateValue(this._inputHandler);
-        this._updateTab();
     };
 
     _initialiseLogValue(start, max, min) {
@@ -197,10 +195,12 @@ class RangeSlider {
     _updateLog(handler) {
         this._log = logScale(this.value, this._logMax, this._logMin);
         handler(this.value, this._log);
+        this._updateTab();
     }
 
     _updateValue(handler) {
         handler(this.value);
+        this._updateTab();
     }
 }
 

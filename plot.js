@@ -2,17 +2,9 @@ const logValueInput = document.getElementById('log-value');
 const logScaleInput = document.getElementById('log-scale-input');
 const linearValueInput = document.getElementById('linear-scale-input');
 
-
 const handleDemoLogUpdate = (value, log) => {
     logValueInput.value = log.toFixed(3);
     logScaleInput.value = value;
-    const data = plotData();
-    Plotly.react('plot', data);
-    Plotly.react('plotTwo', data);
-};
-
-const handleDemoLinearUpdate = (value) => {
-    linearValueInput.value = value;
     const data = plotData();
     Plotly.react('plot', data);
     Plotly.react('plotTwo', data);
@@ -28,6 +20,13 @@ const demoLog = new RangeSlider({
     changeHandler: handleDemoLogUpdate,
 });
 
+const handleDemoLinearUpdate = (value) => {
+    linearValueInput.value = value;
+    const data = plotData();
+    Plotly.react('plot', data);
+    Plotly.react('plotTwo', data);
+};
+
 const demoLinear = new RangeSlider({
     id: 'linear-scale',
     min: 1,
@@ -39,16 +38,18 @@ const demoLinear = new RangeSlider({
 });
 
 logScaleInput.value = demoLog.value;
-linearValueInput.value = demoLinear.value;
-
 logScaleInput.addEventListener('change', function() {
     demoLog.value = this.value;
 });
 
 logValueInput.value = demoLog.log.toFixed(3);
-
 logValueInput.addEventListener('change', function() {
     demoLog.log = Number(this.value);
+});
+
+linearValueInput.value = demoLinear.value;
+linearValueInput.addEventListener('change', function() {
+    demoLinear.value = Number(this.value);
 });
 
 function plotData() {
@@ -107,6 +108,9 @@ function plotLinearData(value, name, colour = 'rgb(16, 16, 16)') {
     };
 }
 
+const initialData = plotData(demoLog.log);
+
+// Linear Plot
 const layout = {
     title: 'Log Calc Plot',
     xaxis: {
@@ -117,6 +121,9 @@ const layout = {
     },
 };
 
+Plotly.newPlot('plot', initialData, layout, {displayModeBar: false});
+
+// Log Log Plot
 const layoutTwo = {
     title: 'Log Calc Plot Two',
     xaxis: {
@@ -129,7 +136,4 @@ const layoutTwo = {
     },
 };
 
-const initialData = plotData(demoLog.log);
-
-Plotly.newPlot('plot', initialData, layout, {displayModeBar: false});
 Plotly.newPlot('plotTwo', initialData, layoutTwo, {displayModeBar: false});
