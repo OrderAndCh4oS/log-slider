@@ -25,10 +25,6 @@ const handleDemoLinearUpdate = (value) => {
 
 const demoLinear = new RangeSlider({
     id: 'linear-scale',
-    min: 1,
-    max: 1000,
-    type: sliderTypes.LINEAR,
-    showTab: true,
     inputHandler: handleDemoLinearUpdate,
     changeHandler: handleDemoLinearUpdate,
 });

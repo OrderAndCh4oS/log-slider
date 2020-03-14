@@ -48,7 +48,7 @@ class RangeSlider {
      * @param {number=1} step Step increment of the range slider.
      * @param {number=1} min Minimum value of the range slider
      * @param {number=1000} max Maximum value of the range slider.
-     * @param {number=500} start The initial value of the range slider.
+     * @param {number=500} value The initial value of the range slider.
      * @param {'log'|'linear'} type Must be one of sliderTypes ie sliderTypes.LOG or sliderTypes.LINEAR.
      * @param {boolean=false} showTab
      * @param {callback=} changeHandler An onChange callback matching (value, log) => {}
@@ -59,23 +59,28 @@ class RangeSlider {
     constructor(
         {
             id,
-            step = 1,
-            min = 1,
-            max = 1000,
-            start = 500,
-            type = sliderTypes.LINEAR,
-            showTab = false,
+            step,
+            min,
+            max,
+            value,
+            type,
+            showTab,
             changeHandler = () => {},
             inputHandler = () => {},
         }) {
         this._id = id;
-        this._type = type;
-        this._initialiseLogValue(start, max, min);
-        this._configureRangeInput(id, type, min, max, step, start);
+        this._input = document.getElementById(id);
+        this._step = this._setAttribute(step, 'step', 1);
+        this._min = this._setAttribute(min, 'min', 1);
+        this._max = this._setAttribute(max, 'max', 1000);
+        this._initialValue = this._setAttribute(value, 'value', 500);
+        this._type = this._setData(type, 'type', sliderTypes.LINEAR);
+        this._showTab = this._setData(type, 'showTab', true);
+        this._initialiseLogValue();
+        this._configureRangeInput();
         this._inputHandler = inputHandler;
         this._changeHandler = changeHandler;
-        this._showTab = showTab;
-        if(showTab) {
+        if(this._showTab) {
             this._wrapper = this._createWrapper();
             this._tab = this._createTab();
             this._updateDom();
@@ -124,6 +129,10 @@ class RangeSlider {
 
     isLinearSlider = () => this._type === sliderTypes.LINEAR;
 
+    reset = () => {
+        this.value = this._initialValue;
+    };
+
     handleChange = () => {
         this.isLogSlider()
             ? this._updateLog(this._changeHandler)
@@ -138,29 +147,28 @@ class RangeSlider {
         this._updateTab();
     };
 
-    _initialiseLogValue(start, max, min) {
+    _initialiseLogValue() {
         if(this.isLogSlider()) {
-            this._log = logScale(start, max, min);
-            this._logMax = max;
-            this._logMin = min;
+            this._log = logScale(this._initialValue, this._max, this._min);
+            this._logMax = this._max;
+            this._logMin = this._min;
         }
     }
 
-    _configureRangeInput(id, type, min, max, step, start) {
-        this._input = document.getElementById(id);
+    _configureRangeInput() {
         if(!this._input) {
-            throw new Error(`No element found with id of ${id}`);
+            throw new Error(`No element found with id of ${this._id}`);
         }
         if(!this._input instanceof HTMLInputElement) {
-            throw new Error(`${id} is not an \`<input />\` tag`);
+            throw new Error(`${this._id} is not an \`<input />\` tag`);
         }
         if(this._input.type !== 'range') {
-            throw new Error(`${id} is not does \`type="range"\` set.`);
+            throw new Error(`${this._id} is not does \`type="range"\` set.`);
         }
-        this._input.min = type === sliderTypes.LOG ? 1 : min;
-        this._input.max = type === sliderTypes.LOG ? 1000 : max;
-        this._input.step = step;
-        this._input.value = start;
+        this._input.min = this._type === sliderTypes.LOG ? 1 : this._min;
+        this._input.max = this._type === sliderTypes.LOG ? 1000 : this._max;
+        this._input.step = this._step;
+        this._input.value = this._initialValue;
         this._input.addEventListener('change', this.handleChange);
         this._input.addEventListener('input', this.handleInput);
     }
@@ -192,7 +200,7 @@ class RangeSlider {
     _updateTab() {
         const value = Number(this.isLogSlider() ? this._log : this.value);
         this._tab.innerText = (value.toFixed(0));
-        this._tab.style.left = ((this.value / 1000) *
+        this._tab.style.left = ((this.value / this._max) *
             (this._wrapper.clientWidth - 10)) + 5 + 'px';
     }
 
@@ -204,6 +212,20 @@ class RangeSlider {
     _updateValue(handler) {
         handler(this.value);
     }
+
+    _setAttribute(param, attribute, defaultValue) {
+        return param !== undefined
+            ? param
+            : this._input.hasAttribute(attribute)
+                ? this._input.getAttribute(attribute)
+                : defaultValue;
+    }
+
+    _setData(param, dataKey, defaultValue) {
+        return param !== undefined
+            ? param
+            : this._input.dataset[dataKey] !== undefined
+                ? this._input.dataset[dataKey]
+                : defaultValue;
+    }
 }
-
-
