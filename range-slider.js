@@ -199,8 +199,9 @@ class RangeSlider {
 
     _updateTab() {
         const value = Number(this.isLogSlider() ? this._log : this.value);
+        const max = Number(this.isLogSlider() ? 1000 : this._max);
         this._tab.innerText = (value.toFixed(0));
-        this._tab.style.left = ((this.value / this._max) *
+        this._tab.style.left = ((this.value / max) *
             (this._wrapper.clientWidth - 10)) + 5 + 'px';
     }
 
