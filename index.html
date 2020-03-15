@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Log Scale</title>
-    <link href="style.css" rel="stylesheet"/>
+    <link href="assets/style.css" rel="stylesheet"/>
+    <link href="assets/range-slider.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="page-wrapper">
@@ -12,7 +13,7 @@
             <div class="col-6 column">
                 <div class="form-field">
                     <label for="log-scale">Log Scale</label>
-                    <input type="range" id="log-scale"/>
+                    <input type="range" id="log-scale" class="range-slider"/>
                 </div>
                 <div class="form-field">
                     <label for="log-scale-input">Value</label>
@@ -26,7 +27,7 @@
             <div class="col-6 column">
                 <div class="form-field">
                     <label for="linear-scale">Linear Scale</label>
-                    <input type="range" id="linear-scale" step="1" min="1" max="2000" data-show-tab="true"/>
+                    <input type="range" id="linear-scale" class="range-slider" step="1" min="1" max="2000" data-show-tab="true"/>
                 </div>
                 <div class="form-field">
                     <label for="linear-scale-input">Value</label>

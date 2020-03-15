@@ -40,6 +40,7 @@ class RangeSlider {
     _tab;
     _inputHandler;
     _changeHandler;
+    _wrapper;
 
     /**
      * RangeSlider constructor
@@ -165,6 +166,7 @@ class RangeSlider {
         if(this._input.type !== 'range') {
             throw new Error(`${this._id} is not does \`type="range"\` set.`);
         }
+        this._input.classList.add('range-slider');
         this._input.min = this._type === sliderTypes.LOG ? 1 : this._min;
         this._input.max = this._type === sliderTypes.LOG ? 1000 : this._max;
         this._input.step = this._step;
@@ -183,17 +185,13 @@ class RangeSlider {
         const wrapper = document.createElement('div');
         wrapper.classList.add('range-slider--wrapper');
         wrapper.style.position = 'relative';
-        wrapper.style.paddingBottom = '8px';
         return wrapper;
     }
 
     _createTab() {
         const tab = document.createElement('span');
         tab.classList.add('range-slider--tab');
-        tab.style.position = 'absolute';
-        tab.style.transform = 'translateX(-50%)';
-        tab.style.fontSize = '11px';
-        tab.style.display = 'block';
+        this._wrapper.style.paddingBottom = '12px';
         return tab;
     }
 
@@ -202,7 +200,7 @@ class RangeSlider {
         const max = Number(this.isLogSlider() ? 1000 : this._max);
         this._tab.innerText = (value.toFixed(0));
         this._tab.style.left = ((this.value / max) *
-            (this._wrapper.clientWidth - 10)) + 5 + 'px';
+            (this._wrapper.clientWidth - 8)) + 4 + 'px';
     }
 
     _updateLog(handler) {

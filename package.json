@@ -1,0 +1,28 @@
+{
+  "name": "@orderandchaos/range-slider",
+  "version": "1.0.0",
+  "description": "Wrapper class for initialising range slider with optional log scaling. ",
+  "main": "range-slider.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarcoma/range-slider.git"
+  },
+  "devDependencies": {
+    "http-server": "^0.12.1"
+  },
+  "keywords": [
+    "range",
+    "slider",
+    "input"
+  ],
+  "author": "Sarcoma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sarcoma/range-slider/issues"
+  },
+  "homepage": "https://github.com/sarcoma/range-slider#readme"
+}
