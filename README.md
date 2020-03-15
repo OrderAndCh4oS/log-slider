@@ -1,6 +1,6 @@
 # log-slider
 
-https://sarcoma.github.io/log-slider/
+https://sarcoma.github.io/range-slider/
 
 ## Setup
 
