@@ -74,12 +74,12 @@ input[type="range"].range-slider::-ms-track {
     color: transparent;
 }
 
-input[typ5="range"].range-slider::-ms-fill-lower {
+input[type="range"].range-slider::-ms-fill-lower {
     background: #808080;
     border-radius: 16px;
 }
 
-input[typ5="range"].range-slider::-ms-fill-upper {
+input[type="range"].range-slider::-ms-fill-upper {
     background: #1c1c1c;
     border-radius: 16px;
 }

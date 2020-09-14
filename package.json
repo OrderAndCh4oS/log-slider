@@ -12,7 +12,7 @@
     "url": "git+https://github.com/sarcoma/range-slider.git"
   },
   "devDependencies": {
-    "http-server": "^0.12.1"
+    "http-server": "^0.12.3"
   },
   "keywords": [
     "range",
