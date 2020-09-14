@@ -1,7 +1,4 @@
 .idea/
-img/
 .replit
-assets/style.css
-index.html
-plot.js
+example/
 .gitignore

@@ -5,10 +5,10 @@ const linearValueInput = document.getElementById('linear-scale-input');
 const handleDemoLogUpdate = (value, log) => {
     logValueInput.value = log.toFixed(3);
     logScaleInput.value = value;
-    plotData();
+    plotData(); // CalcIt or some similar function.
 };
 
-const demoLog = new RangeSlider({
+const demoLog = new LogSlider({
     id: 'log-scale',
     min: 100,
     max: 10000,
@@ -20,10 +20,10 @@ const demoLog = new RangeSlider({
 
 const handleDemoLinearUpdate = (value) => {
     linearValueInput.value = value;
-    plotData();
+    plotData(); // CalcIt or some similar function.
 };
 
-const demoLinear = new RangeSlider({
+const demoLinear = new LogSlider({
     id: 'linear-scale',
     inputHandler: handleDemoLinearUpdate,
     changeHandler: handleDemoLinearUpdate,
@@ -31,7 +31,7 @@ const demoLinear = new RangeSlider({
 
 logScaleInput.value = demoLog.value;
 logScaleInput.addEventListener('change', function() {
-    demoLog.value = this.value;
+    demoLog.value = Number(this.value);
 });
 
 logValueInput.value = demoLog.log.toFixed(3);

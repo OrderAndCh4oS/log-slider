@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Log Scale</title>
     <link href="assets/style.css" rel="stylesheet"/>
-    <link href="assets/range-slider.css" rel="stylesheet"/>
+    <link href="assets/log-slider.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="page-wrapper">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-field">
                     <label for="log-scale-input">Value</label>
-                    <input type="number" id="log-scale-input" step="1" min="1" max="1000"/>
+                    <input type="number" id="log-scale-input" step="1" min="1" max="1000" data-show-tab="true" data-type="log"/>
                 </div>
                 <div class="form-field">
                     <label for="log-value">Log Value</label>
@@ -49,7 +49,7 @@
     </a>
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="range-slider.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/range-slider@1.0.0"></script>
 <script src="plot.js"></script>
 </body>
 </html>
