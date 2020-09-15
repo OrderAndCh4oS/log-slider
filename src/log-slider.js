@@ -25,7 +25,6 @@ const inverseLogScale = (lg, max, min = 0) => {
 const difference = (a, b) => a > b ? a - b : b - a;
 
 const getClosest = (steps, value) => {
-    console.log('HELLLLOOOOOO');
     let diffLast = Infinity;
     let closest = Infinity;
     for(const step of steps) {
