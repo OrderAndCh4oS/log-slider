@@ -101,7 +101,6 @@ class LogSlider {
         this._steps = this._setData(steps, 'steps', null);
         if(typeof this._steps === 'string') this._steps = this._steps.split(',')
             .map(x => Number(x));
-        console.log(this._steps);
         this._initialiseLogValue();
         this._configureRangeInput();
         this._changeHandler = changeHandler;
