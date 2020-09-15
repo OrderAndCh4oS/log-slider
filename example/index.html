@@ -27,7 +27,16 @@
             <div class="col-6 column">
                 <div class="form-field">
                     <label for="linear-scale">Linear Scale</label>
-                    <input type="range" id="linear-scale" class="range-slider" step="1" min="1" max="2000" data-show-tab="true"/>
+                    <input type="range"
+                           id="linear-scale"
+                           class="range-slider"
+                           step="1"
+                           min="1"
+                           max="100"
+                           data-steps="1,5,15,50,75,100"
+                           data-decimal-places="1"
+                           data-show-tab="true"
+                    />
                 </div>
                 <div class="form-field">
                     <label for="linear-scale-input">Value</label>
@@ -49,7 +58,7 @@
     </a>
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/range-slider@1.0.0"></script>
+<script src="log-slider.js"></script>
 <script src="plot.js"></script>
 </body>
 </html>
