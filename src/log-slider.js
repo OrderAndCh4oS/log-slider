@@ -24,22 +24,17 @@ const inverseLogScale = (lg, max, min = 0) => {
 
 const difference = (a, b) => a > b ? a - b : b - a;
 
-let timer;
-
-const snapToClosestStep = (steps, value, setValue) => {
-    if(steps.includes(Number(value))) return;
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-        let diffLast = Infinity;
-        let closest = Infinity;
-        for(const step of steps) {
-            const diff = difference(step, value);
-            if(diff > diffLast) break;
-            diffLast = diff;
-            closest = step;
-        }
-        setValue(closest);
-    }, 250);
+const getClosest = (steps, value) => {
+    console.log('HELLLLOOOOOO');
+    let diffLast = Infinity;
+    let closest = Infinity;
+    for(const step of steps) {
+        const diff = difference(step, value);
+        if(diff > diffLast) break;
+        diffLast = diff;
+        closest = step;
+    }
+    return closest;
 };
 
 const sliderTypes = Object.freeze({
@@ -51,6 +46,7 @@ const sliderTypes = Object.freeze({
  * Handles configuration of <input type="range" /> sliders
  */
 class LogSlider {
+    _result;
     _id;
     _log;
     _logMax;
@@ -60,7 +56,6 @@ class LogSlider {
     _tab;
     _decimalPlaces;
     _steps;
-    _inputHandler;
     _changeHandler;
     _wrapper;
 
@@ -110,14 +105,13 @@ class LogSlider {
         console.log(this._steps);
         this._initialiseLogValue();
         this._configureRangeInput();
-        this._inputHandler = inputHandler;
         this._changeHandler = changeHandler;
         if(this._showTab) {
             this._wrapper = this._createWrapper();
             this._tab = this._createTab();
             this._updateDom();
-            this._updateTab();
         }
+        this._updateResult();
     }
 
     get log() {
@@ -137,8 +131,7 @@ class LogSlider {
         this._log = Math.max(this._logMin, Math.min(value, this._logMax));
         this._input.value = inverseLogScale(this._log, this._logMax,
             this._logMin);
-        this._changeHandler(this.value, this._log);
-        this._updateTab();
+        this._updateResult();
     };
 
     get input() {
@@ -151,10 +144,7 @@ class LogSlider {
 
     set value(value) {
         this._input.value = value;
-        this.isLogSlider()
-            ? this._updateLog(this._changeHandler)
-            : this._updateValue(this._changeHandler);
-        this._updateTab();
+        this._updateResult();
     }
 
     isLogSlider = () => this._type === sliderTypes.LOG;
@@ -163,20 +153,6 @@ class LogSlider {
 
     reset = () => {
         this.value = this._initialValue;
-    };
-
-    handleChange = () => {
-        this.isLogSlider()
-            ? this._updateLog(this._changeHandler)
-            : this._updateValue(this._changeHandler);
-        this._updateTab();
-    };
-
-    handleInput = () => {
-        this.isLogSlider()
-            ? this._updateLog(this._inputHandler)
-            : this._updateValue(this._inputHandler);
-        this._updateTab();
     };
 
     _initialiseLogValue() {
@@ -202,8 +178,23 @@ class LogSlider {
         this._input.max = this._type === sliderTypes.LOG ? 1000 : this._max;
         this._input.step = this._step;
         this._input.value = this._initialValue;
-        this._input.addEventListener('change', this.handleChange);
-        this._input.addEventListener('input', this.handleInput);
+        this._input.addEventListener('input', () => {
+            this._updateResult();
+            this._log = this._result;
+            this._changeHandler(this._result, this.value);
+        });
+        this._input.addEventListener('change', () => {
+            this._updateResult();
+            if(this._steps) this.value = this.isLogSlider()
+                ? inverseLogScale(
+                    this._result,
+                    this._logMax,
+                    this._logMin,
+                )
+                : this._result;
+            this._log = this._result;
+            this._changeHandler(this._result, this.value);
+        });
     }
 
     _updateDom() {
@@ -226,33 +217,15 @@ class LogSlider {
         return tab;
     }
 
-    _updateTab() {
-        const value = Number(this.isLogSlider() ? this._log : this.value);
+    _updateResult() {
+        this._result = this.isLogSlider()
+            ? logScale(this.value, this._logMax, this._logMin)
+            : Number(this.value);
+        if(this._steps) this._result = getClosest(this._steps, this._result);
         const max = Number(this.isLogSlider() ? 1000 : this._max);
-        this._tab.innerText = (value.toFixed(this._decimalPlaces));
+        this._tab.innerText = (this._result.toFixed(this._decimalPlaces));
         this._tab.style.left = ((this.value / max) *
             (this._wrapper.clientWidth - 8)) + 4 + 'px';
-    }
-
-    _updateLog(handler) {
-        this.log = logScale(this.value, this._logMax, this._logMin);
-        handler(this.value, this._log);
-    }
-
-    _updateValue(handler) {
-        if(this._steps) {
-            snapToClosestStep(this._steps, this.value, this._setValue(this));
-            return;
-        }
-        handler(this.value);
-    }
-
-    _setValue(scope) {
-        return (value) => {
-            scope.value = value;
-            scope._changeHandler(value);
-            scope._inputHandler(value);
-        };
     }
 
     _setAttribute(param, attribute, defaultValue) {

@@ -2,7 +2,7 @@ const logValueInput = document.getElementById('log-value');
 const logScaleInput = document.getElementById('log-scale-input');
 const linearValueInput = document.getElementById('linear-scale-input');
 
-const handleDemoLogUpdate = (value, log) => {
+const handleDemoLogUpdate = (log, value) => {
     logValueInput.value = log.toFixed(3);
     logScaleInput.value = value;
     plotData(); // CalcIt or some similar function.
@@ -10,11 +10,11 @@ const handleDemoLogUpdate = (value, log) => {
 
 const demoLog = new LogSlider({
     id: 'log-scale',
-    min: 100,
+    min: 10,
     max: 10000,
     type: sliderTypes.LOG,
+    steps: [10, 100, 1000, 2500, 5000, 7500, 10000],
     showTab: true,
-    inputHandler: handleDemoLogUpdate,
     changeHandler: handleDemoLogUpdate,
 });
 
