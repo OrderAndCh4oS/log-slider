@@ -57,7 +57,8 @@ class LogSlider {
     _callback;
     _wrapperEl;
     _messages;
-    _stepMarkersEl;
+    _stepMarkerContainerEl;
+    _stepMarkerEls = [];
 
     /**
      * RangeSlider constructor
@@ -177,6 +178,7 @@ class LogSlider {
         this._input.value = this._initialValue;
         this._input.addEventListener('input', () => this._handleInputEvent());
         this._input.addEventListener('change', () => this._handleChangeEvent());
+        window.addEventListener('resize', () => this._updateStepMarkers());
     }
 
     _handleInputEvent() {
@@ -230,8 +232,8 @@ class LogSlider {
             this._wrapperEl.append(this._tabEl);
         }
         if(this._steps) {
-            this._stepMarkersEl = this._createStepMarkers();
-            this._wrapperEl.append(this._stepMarkersEl);
+            this._stepMarkerContainerEl = this._createStepMarkers();
+            this._wrapperEl.append(this._stepMarkerContainerEl);
         }
     }
 
@@ -259,8 +261,18 @@ class LogSlider {
                 this._logMax, this._logMin) : step;
             marker.style.left = this._getLeft(leftValue, 8);
             markerContainer.append(marker);
+            this._stepMarkerEls.push(marker)
         }
         return markerContainer;
+    }
+
+    _updateStepMarkers() {
+        for(let i = 0; i < this._stepMarkerEls.length; i++){
+            let marker = this._stepMarkerEls[i];
+            const leftValue = this.isLogSlider() ? inverseLogScale(this._steps[i],
+                this._logMax, this._logMin) : this._steps[i];
+            marker.style.left = this._getLeft(leftValue, 8);
+        }
     }
 
     _setAttribute(param, attribute, defaultValue) {
