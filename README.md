@@ -22,10 +22,10 @@ Import the stylesheet
 
 Include these in your HTML somewhere
 
-*script*
+*script*  
 `<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@1.0.10/lib/log-slider.js"></script>`
 
-*stylesheet*
+*stylesheet*  
 `<link href="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@1.0.10/lib/log-slider.css" rel="stylesheet"/>`
 
 ## Examples
