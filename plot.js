@@ -52,7 +52,6 @@ function plotData() {
     ];
 
     Plotly.react('plot', data);
-    Plotly.react('plotTwo', data);
 }
 
 function plotLogData(log, name, colour = 'rgb(16, 16, 16)') {
