@@ -2,11 +2,33 @@
     display: block;
 }
 
+.range-slider--input-wrapper {
+    position: relative;
+    z-index: 4;
+}
+
 .range-slider--tab {
     position: absolute;
     transform: translateX(-50%);
     font-size: 11px;
     display: block;
+    z-index: 3;
+}
+
+.range-slider--marker-container {
+    position: absolute;
+    height: 15px;
+    bottom: 16px;
+    z-index: 1;
+}
+
+.range-slider--marker {
+    position: absolute;
+    width: 3px;
+    height: 15px;
+    border-radius: 1px;
+    z-index: 2;
+    background-color: #929292;
 }
 
 input[type="range"].range-slider {

@@ -15,7 +15,7 @@ const demoLog = new LogSlider({
     type: sliderTypes.LOG,
     steps: [10, 100, 1000, 2500, 5000, 7500, 10000],
     showTab: true,
-    changeHandler: handleDemoLogUpdate,
+    callback: handleDemoLogUpdate,
 });
 
 const handleDemoLinearUpdate = (value) => {
@@ -25,8 +25,7 @@ const handleDemoLinearUpdate = (value) => {
 
 const demoLinear = new LogSlider({
     id: 'linear-scale',
-    inputHandler: handleDemoLinearUpdate,
-    changeHandler: handleDemoLinearUpdate,
+    callback: handleDemoLinearUpdate,
 });
 
 logScaleInput.value = demoLog.value;
@@ -117,20 +116,5 @@ const layout = {
 };
 
 Plotly.newPlot('plot', initialData, layout, {displayModeBar: false});
-
-// Log Log Plot
-const layoutTwo = {
-    title: 'Log Calc Plot Two',
-    xaxis: {
-        type: 'log',
-        autorange: true,
-    },
-    yaxis: {
-        type: 'log',
-        autorange: true,
-    },
-};
-
-Plotly.newPlot('plotTwo', initialData, layoutTwo, {displayModeBar: false});
 
 plotData();

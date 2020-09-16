@@ -47,16 +47,17 @@ const sliderTypes = Object.freeze({
 class LogSlider {
     _result;
     _id;
-    _log;
     _logMax;
     _logMin;
     _input;
     _type;
-    _tab;
+    _tabEl;
     _decimalPlaces;
     _steps;
-    _changeHandler;
-    _wrapper;
+    _callback;
+    _wrapperEl;
+    _messages;
+    _stepMarkersEl;
 
     /**
      * RangeSlider constructor
@@ -70,10 +71,8 @@ class LogSlider {
      * @param {boolean=false} showTab
      * @param {number=0} decimalPlaces
      * @param {number[]|null} steps
-     * @param {callback=} changeHandler An onChange callback matching (value, log) => {}
+     * @param {callback=} callback An onChange callback matching (value, log) => {}
      *                                  log parameter only available if the type is sliderType.LOG.
-     * @param {callback=} inputHandler An onInput callback matching (value, log) => {}
-     *                                 log only available if type is sliderType.LOG.
      */
     constructor(
         {
@@ -86,10 +85,16 @@ class LogSlider {
             showTab,
             decimalPlaces,
             steps,
-            changeHandler = () => {},
-            inputHandler = () => {},
+            callback = () => {},
         }) {
         this._id = id;
+        this._messages = {
+            elementNotFound: `No element found with id of ${this._id}`,
+            isNotInputElement: `${this._id} is not an \`<input />\` tag`,
+            isNotTypeRange: `${this._id} does not have \`type="range"\` set.`,
+            notLogSliderGet: `${this._id} is not a log slider, you can't 'get' a log value. Change the type to sliderTypes.LOG`,
+            notLogSliderSet: `${this._id} is not a log slider, you can't 'set' a log value. Change the type to sliderTypes.LOG`,
+        };
         this._input = document.getElementById(id);
         this._step = this._setAttribute(step, 'step', 1);
         this._min = this._setAttribute(min, 'min', 1);
@@ -99,35 +104,31 @@ class LogSlider {
         this._showTab = this._setData(showTab, 'showTab', true);
         this._decimalPlaces = this._setData(decimalPlaces, 'decimalPlaces', 0);
         this._steps = this._setData(steps, 'steps', null);
-        if(typeof this._steps === 'string') this._steps = this._steps.split(',')
+        this._callback = callback;
+        if(typeof this._steps === 'string') this._steps = this._steps
+            .split(',')
             .map(x => Number(x));
         this._initialiseLogValue();
         this._configureRangeInput();
-        this._changeHandler = changeHandler;
-        if(this._showTab) {
-            this._wrapper = this._createWrapper();
-            this._tab = this._createTab();
-            this._updateDom();
-        }
+        this._createDomElements();
         this._updateResult();
+        this._snapToStep();
     }
 
     get log() {
         if(!this.isLogSlider()) {
-            throw new Error(
-                `${this._id} is not a log slider, you can't get a log value. Change the type to sliderTypes.LOG`);
+            throw new Error(this._messages.notLogSliderGet);
         }
 
-        return this._log;
+        return this._result;
     }
 
     set log(value) {
         if(!this.isLogSlider()) {
-            throw new Error(
-                `${this._id} is not a log slider, you can't set a log value. Change the type to sliderTypes.LOG`);
+            throw new Error(this._messages.notLogSliderSet);
         }
-        this._log = Math.max(this._logMin, Math.min(value, this._logMax));
-        this._input.value = inverseLogScale(this._log, this._logMax,
+        this._result = Math.max(this._logMin, Math.min(value, this._logMax));
+        this._input.value = inverseLogScale(this._result, this._logMax,
             this._logMin);
         this._updateResult();
     };
@@ -149,13 +150,11 @@ class LogSlider {
 
     isLinearSlider = () => this._type === sliderTypes.LINEAR;
 
-    reset = () => {
-        this.value = this._initialValue;
-    };
+    reset = () => {this.value = this._initialValue;};
 
     _initialiseLogValue() {
         if(this.isLogSlider()) {
-            this._log = logScale(this._initialValue, this._max, this._min);
+            this._result = logScale(this._initialValue, this._max, this._min);
             this._logMax = this._max;
             this._logMin = this._min;
         }
@@ -163,56 +162,42 @@ class LogSlider {
 
     _configureRangeInput() {
         if(!this._input) {
-            throw new Error(`No element found with id of ${this._id}`);
+            throw new Error(this._messages.elementNotFound);
         }
         if(!this._input instanceof HTMLInputElement) {
-            throw new Error(`${this._id} is not an \`<input />\` tag`);
+            throw new Error(this._messages.isNotInputElement);
         }
         if(this._input.type !== 'range') {
-            throw new Error(`${this._id} is not does \`type="range"\` set.`);
+            throw new Error(this._messages.isNotTypeRange);
         }
         this._input.classList.add('range-slider');
-        this._input.min = this._type === sliderTypes.LOG ? 1 : this._min;
-        this._input.max = this._type === sliderTypes.LOG ? 1000 : this._max;
+        this._input.min = this.isLogSlider() ? 1 : this._min;
+        this._input.max = this.isLogSlider() ? 1000 : this._max;
         this._input.step = this._step;
         this._input.value = this._initialValue;
-        this._input.addEventListener('input', () => {
-            this._updateResult();
-            this._log = this._result;
-            this._changeHandler(this._result, this.value);
-        });
-        this._input.addEventListener('change', () => {
-            this._updateResult();
-            if(this._steps) this.value = this.isLogSlider()
-                ? inverseLogScale(
-                    this._result,
-                    this._logMax,
-                    this._logMin,
-                )
-                : this._result;
-            this._log = this._result;
-            this._changeHandler(this._result, this.value);
-        });
+        this._input.addEventListener('input', () => this._handleInputEvent());
+        this._input.addEventListener('change', () => this._handleChangeEvent());
     }
 
-    _updateDom() {
-        this._input.parentNode.insertBefore(this._wrapper, this._input);
-        this._wrapper.append(this._input);
-        this._wrapper.append(this._tab);
+    _handleInputEvent() {
+        this._updateResult();
+        this._callback(this._result, this.value);
     }
 
-    _createWrapper() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('range-slider--wrapper');
-        wrapper.style.position = 'relative';
-        return wrapper;
+    _handleChangeEvent() {
+        this._updateResult();
+        this._snapToStep();
+        this._callback(this._result, this.value);
     }
 
-    _createTab() {
-        const tab = document.createElement('span');
-        tab.classList.add('range-slider--tab');
-        this._wrapper.style.paddingBottom = '12px';
-        return tab;
+    _snapToStep() {
+        if(this._steps) this.value = this.isLogSlider()
+            ? inverseLogScale(
+                this._result,
+                this._logMax,
+                this._logMin,
+            )
+            : this._result;
     }
 
     _updateResult() {
@@ -220,10 +205,62 @@ class LogSlider {
             ? logScale(this.value, this._logMax, this._logMin)
             : Number(this.value);
         if(this._steps) this._result = getClosest(this._steps, this._result);
+        if(this._showTab) this._updateTab();
+    }
+
+    _updateTab() {
+        this._tabEl.innerText = (this._result.toFixed(this._decimalPlaces));
+        this._tabEl.style.left = this._getLeft(this.value, 8);
+    }
+
+    _getLeft(value, offset = 0) {
         const max = Number(this.isLogSlider() ? 1000 : this._max);
-        this._tab.innerText = (this._result.toFixed(this._decimalPlaces));
-        this._tab.style.left = ((this.value / max) *
-            (this._wrapper.clientWidth - 8)) + 4 + 'px';
+        const min = Number(this.isLogSlider() ? 1 : this._min);
+        return (((value - min) / max) * (this._wrapperEl.clientWidth - offset)) + (offset / 2) + 'px';
+    }
+
+    _createDomElements() {
+        this._wrapperEl = this._createWrapper('range-slider--wrapper');
+        this._input.parentNode.insertBefore(this._wrapperEl, this._input);
+        this._inputWrapperEl = this._createWrapper('range-slider--input-wrapper');
+        this._inputWrapperEl.append(this._input);
+        this._wrapperEl.append(this._inputWrapperEl);
+        if(this._showTab) {
+            this._tabEl = this._createTab();
+            this._wrapperEl.append(this._tabEl);
+        }
+        if(this._steps) {
+            this._stepMarkersEl = this._createStepMarkers();
+            this._wrapperEl.append(this._stepMarkersEl);
+        }
+    }
+
+    _createWrapper(className) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add(className);
+        wrapper.style.position = 'relative';
+        return wrapper;
+    }
+
+    _createTab() {
+        const tab = document.createElement('span');
+        tab.classList.add('range-slider--tab');
+        this._wrapperEl.style.paddingBottom = '12px';
+        return tab;
+    }
+
+    _createStepMarkers() {
+        const markerContainer = document.createElement('div');
+        markerContainer.classList.add('range-slider--marker-container');
+        for(const step of this._steps) {
+            const marker = document.createElement('div');
+            marker.classList.add('range-slider--marker');
+            const leftValue = this.isLogSlider() ? inverseLogScale(step,
+                this._logMax, this._logMin) : step;
+            marker.style.left = this._getLeft(leftValue, 8);
+            markerContainer.append(marker);
+        }
+        return markerContainer;
     }
 
     _setAttribute(param, attribute, defaultValue) {
