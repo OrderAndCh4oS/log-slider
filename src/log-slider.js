@@ -1,4 +1,4 @@
-export const logScale = (value, max, min = 0) => {
+const logScale = (value, max, min = 0) => {
     const minP = 1;
     const maxP = 1000;
 
@@ -10,7 +10,7 @@ export const logScale = (value, max, min = 0) => {
     return Math.exp(minV + scale * (value - minP));
 };
 
-export const inverseLogScale = (lg, max, min = 0) => {
+const inverseLogScale = (lg, max, min = 0) => {
     const minP = 1;
     const maxP = 1000;
 
@@ -22,7 +22,7 @@ export const inverseLogScale = (lg, max, min = 0) => {
     return (Math.log(lg) - minV) / scale + minP;
 };
 
-export const sliderTypes = Object.freeze({
+const sliderTypes = Object.freeze({
     LOG: 'log',
     LINEAR: 'linear',
 });
@@ -44,7 +44,7 @@ const getClosest = (steps, value) => {
 /**
  * Handles configuration of <input type="range" /> sliders
  */
-export default class LogSlider {
+class LogSlider {
     _result;
     _id;
     _logMax;

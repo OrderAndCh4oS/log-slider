@@ -6,18 +6,6 @@ https://sarcoma.github.io/log-slider/
 
 ## Setup
 
-### NPM
-
-run `npm install @orderandchaos/log-slider`
-
-Then import the LogSlider class where needed.
-
-`import LogSlider from '@orderandchaos/log-slider'`
-
-Import the stylesheet
-
-`import '@orderandchaos/log-slider/log-slider.css'`
-
 ### CDN 
 
 Include these in your HTML somewhere
