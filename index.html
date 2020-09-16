@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log Scale</title>
+    <link href="assets/style.css" rel="stylesheet"/>
+    <link href="assets/log-slider.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 column">
+                <div class="form-field">
+                    <label for="log-scale">Log Scale</label>
+                    <input type="range" id="log-scale" class="range-slider"/>
+                </div>
+                <div class="form-field">
+                    <label for="log-scale-input">Value</label>
+                    <input type="number" id="log-scale-input" data-show-tab="true"/>
+                </div>
+                <div class="form-field">
+                    <label for="log-value">Log Value</label>
+                    <input type="number" id="log-value" min="100" max="10000"/>
+                </div>
+            </div>
+            <div class="col-6 column">
+                <div class="form-field">
+                    <label for="linear-scale">Linear Scale</label>
+                    <input type="range"
+                           id="linear-scale"
+                           class="range-slider"
+                           step="1"
+                           min="1"
+                           max="100"
+                           data-steps="1,5,15,50,75,100"
+                           data-decimal-places="1"
+                           data-show-tab="true"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="linear-scale-input">Value</label>
+                    <input type="number" id="linear-scale-input" step="1" min="1" max="1000"/>
+                </div>
+            </div>
+            <div class="col-12 column">
+                <div id="plot"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="logo" style="position: fixed; bottom: 30px; right:30px;">
+    <a href="https://orderandchaoscreative.com">
+        <img src="img/order-and-chaos-logo--on-white.svg" alt="Order & Chaos Creative" style="width: 180px; height: auto;">
+    </a>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="log-slider.js"></script>
+<script src="plot.js"></script>
+</body>
+</html>
