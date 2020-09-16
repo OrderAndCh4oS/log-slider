@@ -10,6 +10,11 @@ const handleDemoLogUpdate = (log, value) => {
 
 const demoLog = new LogSlider({
     id: 'log-scale',
+    min: 10,
+    max: 10000,
+    type: sliderTypes.LOG,
+    steps: [10, 100, 1000, 2500, 5000, 7500, 10000],
+    showTab: true,
     callback: handleDemoLogUpdate,
 });
 
