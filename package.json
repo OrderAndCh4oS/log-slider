@@ -1,9 +1,9 @@
 {
   "name": "@orderandchaos/log-slider",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Wrapper class for initialising range slider with optional log scaling. ",
   "main": "lib/log-slider.js",
-  "source": "src/range-slider.js",
+  "source": "src/slider.js",
   "scripts": {
     "build": "gulp",
     "watch": "gulp && gulp watch",
