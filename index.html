@@ -13,15 +13,25 @@
             <div class="col-6 column">
                 <div class="form-field">
                     <label for="log-scale">Log Scale</label>
-                    <input type="range" id="log-scale" class="range-slider"/>
+                    <input
+                        type="range"
+                        id="log-scale"
+                        class="slider"
+                        step="1"
+                        min="10"
+                        max="10000"
+                        data-type="log"
+                        data-steps="10,100,1000,10000"
+                        data-show-tab="true"
+                    />
                 </div>
                 <div class="form-field">
                     <label for="log-scale-input">Value</label>
                     <input type="number" id="log-scale-input" data-show-tab="true"/>
                 </div>
                 <div class="form-field">
-                    <label for="log-value">Log Value</label>
-                    <input type="number" id="log-value" min="100" max="10000"/>
+                    <label for="log-value-input">Log Value</label>
+                    <input type="number" id="log-value-input" min="100" max="10000"/>
                 </div>
             </div>
             <div class="col-6 column">
@@ -29,12 +39,10 @@
                     <label for="linear-scale">Linear Scale</label>
                     <input type="range"
                            id="linear-scale"
-                           class="range-slider"
-                           step="1"
-                           min="1"
-                           max="100"
-                           data-steps="1,5,15,50,75,100"
-                           data-decimal-places="1"
+                           class="slider"
+                           step="0.1"
+                           min="0"
+                           max="10"
                            data-show-tab="true"
                     />
                 </div>
