@@ -113,7 +113,7 @@ const demoLinear = new LogSlider({
 });
 ```
 
-### Log scale slider with steps
+### Log scale slider
 *html*
 ```html
 <div class="form-field">
