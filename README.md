@@ -8,13 +8,13 @@ https://sarcoma.github.io/log-slider/
 
 ### CDN 
 
-Include these in your HTML somewhere
+Include these in your HTML somewhere (update the version number if a new version is available).
 
 *script*  
-`<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@1.0.10/lib/log-slider.js"></script>`
+`<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.2/lib/log-slider.js"></script>`
 
 *stylesheet*  
-`<link href="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@1.0.10/lib/log-slider.css" rel="stylesheet"/>`
+`<link href="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.2/lib/log-slider.css" rel="stylesheet"/>`
 
 ## Examples
 
