@@ -140,7 +140,6 @@ class LogSlider {
     }
 
     set value(value) {
-        console.log(value);
         this._result = value;
         this._input.value = this.isLogSlider()
             ? inverseLogScale(
