@@ -132,6 +132,7 @@ class LogSlider {
 
     set inputValue(value) {
         this._input.value = value;
+        this._handleInputEvent();
     }
 
     get value() {
@@ -139,7 +140,15 @@ class LogSlider {
     }
 
     set value(value) {
+        console.log(value);
         this._result = value;
+        this._input.value = this.isLogSlider()
+            ? inverseLogScale(
+                this._result,
+                this._logMax,
+                this._logMin,
+            )
+            : this._result;
         this._updateResult();
         this._callback(this._result, this._input.value);
     }
