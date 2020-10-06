@@ -1,6 +1,6 @@
 {
   "name": "@orderandchaos/log-slider",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Wrapper class for initialising range slider with optional log scaling. ",
   "main": "lib/log-slider.js",
   "source": "src/slider.js",

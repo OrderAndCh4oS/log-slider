@@ -99,21 +99,23 @@ class LogSlider {
         this._step = this._setAttribute(step, 'step', 1);
         this._min = this._setAttribute(min, 'min', 1);
         this._max = this._setAttribute(max, 'max', 1000);
-        this._initialValue = this._setAttribute(value, 'inputValue', 500);
+        this._logMin = this._min;
+        this._logMax = this._max;
         this._type = this._setData(type, 'type', sliderTypes.LINEAR);
         this._showTab = this._setData(showTab, 'showTab', true);
         this._steps = this._setData(steps, 'steps', null);
+        this._initialValue = this._setAttribute(value, 'value', 1);
         this._decimalPlaces = this._countDecimalPlaces(this._step);
         this._callback = callback;
         if(typeof this._steps === 'string') this._steps = this._steps
             .split(',')
             .map(x => Number(x));
-        this._initialiseLogValue();
         this._configureRangeInput();
         this._createDomElements();
         this._updateResult();
         this._snapToStep();
         this._updateTab();
+        this.value = this._initialValue;
     }
 
     _countDecimalPlaces(value) {
@@ -159,11 +161,9 @@ class LogSlider {
     reset = () => {this.value = this._initialValue};
 
     _initialiseLogValue() {
-        if(this.isLogSlider()) {
-            this._result = logScale(this._initialValue, this._max, this._min);
-            this._logMax = this._max;
-            this._logMin = this._min;
-        }
+        this._result = logScale(this._initialValue, this._max, this._min);
+        this._logMax = this._max;
+        this._logMin = this._min;
     }
 
     _configureRangeInput() {
