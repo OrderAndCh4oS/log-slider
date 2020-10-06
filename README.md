@@ -11,10 +11,10 @@ https://sarcoma.github.io/log-slider/
 Include these in your HTML somewhere (update the version number if a new version is available).
 
 *script*  
-`<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.2/lib/log-slider.js"></script>`
+`<script src="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.4/lib/log-slider.js"></script>`
 
 *stylesheet*  
-`<link href="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.2/lib/log-slider.css" rel="stylesheet"/>`
+`<link href="https://cdn.jsdelivr.net/npm/@orderandchaos/log-slider@3.0.4/lib/log-slider.css" rel="stylesheet"/>`
 
 ## Examples
 

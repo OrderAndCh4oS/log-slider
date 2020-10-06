@@ -160,12 +160,6 @@ class LogSlider {
 
     reset = () => {this.value = this._initialValue};
 
-    _initialiseLogValue() {
-        this._result = logScale(this._initialValue, this._max, this._min);
-        this._logMax = this._max;
-        this._logMin = this._min;
-    }
-
     _configureRangeInput() {
         if(!this._input) {
             throw new Error(this._messages.elementNotFound);
