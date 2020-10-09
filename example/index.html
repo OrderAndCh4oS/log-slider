@@ -8,8 +8,16 @@
 </head>
 <body>
 <div class="page-wrapper">
-    <div class="container">
+    <article class="container">
         <div class="row">
+            <div class="col-6 column">
+                <h1>Log Slider Demo</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 column">
+                <h2>Fluid</h2>
+            </div>
             <div class="col-6 column">
                 <div class="form-field">
                     <label for="log-scale">Log Scale</label>
@@ -52,7 +60,55 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-12 column">
+                <h2>Stepped</h2>
+            </div>
+            <div class="col-6 column">
+                <div class="form-field">
+                    <label for="log-scale-stepped">Log Scale</label>
+                    <input
+                        id="log-scale-stepped"
+                        type="range"
+                        class="slider"
+                        min="0.01"
+                        max="100"
+                        value="66"
+                        step="0.01"
+                        data-steps="0.01,1,3.3,6.6,10,33,66,100"
+                        data-type="log"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="log-scale-stepped-input">Value</label>
+                    <input type="number" id="log-scale-stepped-input" data-show-tab="true"/>
+                </div>
+                <div class="form-field">
+                    <label for="log-value-stepped-input">Log Value</label>
+                    <input type="number" id="log-value-stepped-input" min="0.01" max="100" step="0.01"/>
+                </div>
+            </div>
+            <div class="col-6 column">
+                <div class="form-field">
+                    <label for="linear-scale-stepped">Linear Scale</label>
+                    <input type="range"
+                           id="linear-scale-stepped"
+                           class="slider"
+                           step="0.1"
+                           value="5"
+                           min="1"
+                           max="50"
+                           data-steps="1,5,10,20,30,50"
+                           data-show-tab="true"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="linear-scale-stepped-input">Value</label>
+                    <input type="number" id="linear-scale-stepped-input" step="0.1" min="0.1" max="10"/>
+                </div>
+            </div>
+        </div>
+    </article>
 </div>
 <div class="logo" style="position: fixed; bottom: 30px; right:30px;">
     <a href="https://orderandchaoscreative.com">
@@ -62,5 +118,6 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="log-slider.js"></script>
 <script src="example.js"></script>
+<script src="example-stepped.js"></script>
 </body>
 </html>
