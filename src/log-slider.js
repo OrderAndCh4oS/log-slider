@@ -191,7 +191,6 @@ class LogSlider {
     _handleChangeEvent() {
         this._snapToStep();
         this._updateTab();
-        this._callback(this._result, this._input.value);
     }
 
     _snapToStep() {
