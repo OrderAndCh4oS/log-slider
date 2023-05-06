@@ -2,7 +2,7 @@
 
 # log-slider
 
-https://sarcoma.github.io/log-slider/
+https://OrderAndCh4oS.github.io/log-slider/
 
 ## Setup
 
