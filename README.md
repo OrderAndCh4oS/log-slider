@@ -1,5 +1,3 @@
-[![NPM](https://img.shields.io/npm/v/@orderandchaos/log-slider.svg)](https://www.npmjs.com/package/@orderandchaos/log-slider)
-
 # log-slider
 
 https://OrderAndCh4oS.github.io/log-slider/
